@@ -20,14 +20,17 @@
     color: #00ffff;
     text-shadow: 0 0 8px #00ffff;
   }
-  .ticker {
-    position: absolute;
-    bottom: 25px;
-    white-space: nowrap;
-    font-size: 34px;
-    color: #00ff88;
-    text-shadow: 0 0 6px #00ff88;
-  }
+.ticker {
+  position: absolute;
+  bottom: 25px;
+  white-space: nowrap;
+  font-size: 34px;
+  color: #00ff88;
+  text-shadow: 0 0 6px #00ff88;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+}
+
   @keyframes scroll {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
