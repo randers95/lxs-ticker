@@ -6,36 +6,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
   body {
-    background-color: black;
+    background-color: #000;
     color: #00ff88;
     font-family: 'Courier New', monospace;
     margin: 0;
     overflow: hidden;
   }
+  .overlay {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-size: 22px;
+    color: #00ffff;
+    text-shadow: 0 0 8px #00ffff;
+  }
   .ticker {
     position: absolute;
-    bottom: 20px;
+    bottom: 25px;
     white-space: nowrap;
-    animation: scroll 90s linear infinite;
-    font-size: 36px;
-    text-shadow: 0 0 5px #00ff88;
+    animation: scroll 120s linear infinite;
+    font-size: 34px;
+    color: #00ff88;
+    text-shadow: 0 0 6px #00ff88;
   }
   @keyframes scroll {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
   }
-  .symbol { margin-right: 60px; }
+  .symbol { margin-right: 65px; }
   .up { color: #00ff00; }
   .down { color: #ff4040; }
 </style>
 </head>
 <body>
+  <div class="overlay">📈 LXS LIVE — The Liberty Exchange</div>
   <div class="ticker">
     <span class="symbol">VCFC ▲ 142.22 <span class="up">+1.5%</span></span>
     <span class="symbol">TQLL ▼ 98.44 <span class="down">-0.8%</span></span>
     <span class="symbol">VHSX ▲ 216.09 <span class="up">+3.2%</span></span>
     <span class="symbol">BANS ▲ 77.51 <span class="up">+0.9%</span></span>
     <span class="symbol">CRTG ▼ 104.28 <span class="down">-1.1%</span></span>
+    <span class="symbol">WMFX ▲ 155.12 <span class="up">+2.4%</span></span>
+    <span class="symbol">DYNM ▼ 63.74 <span class="down">-0.5%</span></span>
+    <span class="symbol">GRVC ▲ 89.33 <span class="up">+0.7%</span></span>
+    <span class="symbol">STRM ▲ 131.45 <span class="up">+1.2%</span></span>
+    <span class="symbol">SUND ▼ 72.18 <span class="down">-0.4%</span></span>
+    <!-- duplicate to ensure seamless loop -->
+    <span class="symbol">VCFC ▲ 142.22 <span class="up">+1.5%</span></span>
+    <span class="symbol">TQLL ▼ 98.44 <span class="down">-0.8%</span></span>
+    <span class="symbol">VHSX ▲ 216.09 <span class="up">+3.2%</span></span>
+    <span class="symbol">BANS ▲ 77.51 <span class="up">+0.9%</span></span>
+    <span class="symbol">CRTG ▼ 104.28 <span class="down">-1.1%</span></span>
+    <span class="symbol">WMFX ▲ 155.12 <span class="up">+2.4%</span></span>
+    <span class="symbol">DYNM ▼ 63.74 <span class="down">-0.5%</span></span>
+    <span class="symbol">GRVC ▲ 89.33 <span class="up">+0.7%</span></span>
+    <span class="symbol">STRM ▲ 131.45 <span class="up">+1.2%</span></span>
+    <span class="symbol">SUND ▼ 72.18 <span class="down">-0.4%</span></span>
   </div>
+</body>
+</html>
+
 </body>
 </html>
