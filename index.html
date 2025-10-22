@@ -24,7 +24,6 @@
     position: absolute;
     bottom: 25px;
     white-space: nowrap;
-    animation: scroll 120s linear infinite;
     font-size: 34px;
     color: #00ff88;
     text-shadow: 0 0 6px #00ff88;
@@ -33,6 +32,9 @@
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
   }
+  .scrolling {
+    animation: scroll 240s linear infinite;
+  }
   .symbol { margin-right: 65px; }
   .up { color: #00ff00; }
   .down { color: #ff4040; }
@@ -40,31 +42,43 @@
 </head>
 <body>
   <div class="overlay">📈 LXS LIVE — The Liberty Exchange</div>
-  <div class="ticker">
-    <span class="symbol">VCFC ▲ 142.22 <span class="up">+1.5%</span></span>
-    <span class="symbol">TQLL ▼ 98.44 <span class="down">-0.8%</span></span>
-    <span class="symbol">VHSX ▲ 216.09 <span class="up">+3.2%</span></span>
-    <span class="symbol">BANS ▲ 77.51 <span class="up">+0.9%</span></span>
-    <span class="symbol">CRTG ▼ 104.28 <span class="down">-1.1%</span></span>
-    <span class="symbol">WMFX ▲ 155.12 <span class="up">+2.4%</span></span>
-    <span class="symbol">DYNM ▼ 63.74 <span class="down">-0.5%</span></span>
-    <span class="symbol">GRVC ▲ 89.33 <span class="up">+0.7%</span></span>
-    <span class="symbol">STRM ▲ 131.45 <span class="up">+1.2%</span></span>
-    <span class="symbol">SUND ▼ 72.18 <span class="down">-0.4%</span></span>
-    <!-- duplicate to ensure seamless loop -->
-    <span class="symbol">VCFC ▲ 142.22 <span class="up">+1.5%</span></span>
-    <span class="symbol">TQLL ▼ 98.44 <span class="down">-0.8%</span></span>
-    <span class="symbol">VHSX ▲ 216.09 <span class="up">+3.2%</span></span>
-    <span class="symbol">BANS ▲ 77.51 <span class="up">+0.9%</span></span>
-    <span class="symbol">CRTG ▼ 104.28 <span class="down">-1.1%</span></span>
-    <span class="symbol">WMFX ▲ 155.12 <span class="up">+2.4%</span></span>
-    <span class="symbol">DYNM ▼ 63.74 <span class="down">-0.5%</span></span>
-    <span class="symbol">GRVC ▲ 89.33 <span class="up">+0.7%</span></span>
-    <span class="symbol">STRM ▲ 131.45 <span class="up">+1.2%</span></span>
-    <span class="symbol">SUND ▼ 72.18 <span class="down">-0.4%</span></span>
+  <div class="ticker scrolling" id="ticker">
+    <span>Loading ticker data...</span>
   </div>
-</body>
-</html>
 
+<script>
+const ticker = document.getElementById('ticker');
+const FEED_URL = "https://script.google.com/macros/s/AKfycbySgsOv083Th7Rg9ECTDEybsciew2uBBq7fvzJF6vlY_DNjxdcVcLJAcq3Ji-v8oJjk/exec";
+
+// Fetch ticker data and update display
+async function loadTickers() {
+  try {
+    const res = await fetch(FEED_URL);
+    if (!res.ok) throw new Error("Feed not reachable");
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      ticker.innerHTML = "<span style='color: red;'>No data available.</span>";
+      return;
+    }
+
+    const html = data.map(t => {
+      const dir = t.direction === "up" ? "▲" : "▼";
+      return `<span class="symbol">${t.symbol} ${dir} ${t.price} 
+        <span class="${t.direction}">${t.change}</span></span>`;
+    }).join('');
+
+    // Duplicate once for smooth infinite scroll
+    ticker.innerHTML = html + html;
+  } catch (err) {
+    console.error(err);
+    ticker.innerHTML = "<span style='color:red;'>Error loading ticker feed.</span>";
+  }
+}
+
+// Run immediately, then refresh every 30 seconds
+loadTickers();
+setInterval(loadTickers, 30000);
+</script>
 </body>
 </html>
