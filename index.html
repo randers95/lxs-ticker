@@ -50,33 +50,55 @@
 const ticker = document.getElementById('ticker');
 const FEED_URL = "https://script.google.com/macros/s/AKfycbySgsOv083Th7Rg9ECTDEybsciew2uBBq7fvzJF6vlY_DNjxdcVcLJAcq3Ji-v8oJjk/exec";
 
-// Fetch ticker data and update display
+let currentData = [];
+
+// Build ticker for the first time
+function renderTicker(data) {
+  const html = data.map(t => {
+    const dir = t.direction === "up" ? "▲" : "▼";
+    return `<span class="symbol" id="${t.symbol}">
+      ${t.symbol} ${dir} <span class="${t.direction} price">${t.price}</span>
+      <span class="${t.direction} change">${t.change}</span></span>`;
+  }).join('');
+  ticker.innerHTML = html + html; // duplicate for seamless loop
+  ticker.classList.add('scrolling');
+}
+
+// Update prices while scrolling
 async function loadTickers() {
   try {
     const res = await fetch(FEED_URL);
     if (!res.ok) throw new Error("Feed not reachable");
     const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return;
 
-    if (!Array.isArray(data) || data.length === 0) {
-      ticker.innerHTML = "<span style='color: red;'>No data available.</span>";
+    // First load builds ticker
+    if (currentData.length === 0) {
+      currentData = data;
+      renderTicker(data);
       return;
     }
 
-    const html = data.map(t => {
-      const dir = t.direction === "up" ? "▲" : "▼";
-      return `<span class="symbol">${t.symbol} ${dir} ${t.price} 
-        <span class="${t.direction}">${t.change}</span></span>`;
-    }).join('');
+    // Update existing symbols in place
+    data.forEach(t => {
+      const el = document.getElementById(t.symbol);
+      if (el) {
+        const priceEl = el.querySelector('.price');
+        const changeEl = el.querySelector('.change');
+        if (priceEl) priceEl.textContent = t.price;
+        if (changeEl) changeEl.textContent = t.change;
+        priceEl.className = `${t.direction} price`;
+        changeEl.className = `${t.direction} change`;
+      }
+    });
 
-    // Duplicate once for smooth infinite scroll
-    ticker.innerHTML = html + html;
+    currentData = data;
   } catch (err) {
     console.error(err);
-    ticker.innerHTML = "<span style='color:red;'>Error loading ticker feed.</span>";
   }
 }
 
-// Run immediately, then refresh every 30 seconds
+// Initial load and timed updates
 loadTickers();
 setInterval(loadTickers, 30000);
 </script>
