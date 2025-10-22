@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Liberty Exchange — Live Ticker</title>
+<style>
+  body {
+    background-color: #000;
+    color: #00ff88;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    overflow: hidden;
+  }
+  .overlay {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-size: 20px;
+    color: #00ffff;
+    text-shadow: 0 0 8px #00ffff;
+  }
+  .ticker {
+    position: absolute;
+    bottom: 20px;
+    white-space: nowrap;
+    animation: scroll 90s linear infinite;
+    font-size: 36px;
+    color: #00ff88;
+    text-shadow: 0 0 5px #00ff88;
+  }
+  @keyframes scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  .symbol { margin-right: 60px; }
+  .up { color: #00ff00; }
+  .down { color: #ff4040; }
+</style>
+</head>
+<body>
+  <div class="overlay">📈 LXS LIVE — The Liberty Exchange</div>
+  <div class="ticker">
+    <span class="symbol">VCFC ▲ 142.22 <span class="up">+1.5%</span></span>
+    <span class="symbol">TQLL ▼ 98.44 <span class="down">-0.8%</span></span>
+    <span class="symbol">VHSX ▲ 216.09 <span class="up">+3.2%</span></span>
+    <span class="symbol">BANS ▲ 77.51 <span class="up">+0.9%</span></span>
+    <span class="symbol">CRTG ▼ 104.28 <span class="down">-1.1%</span></span>
+    <span class="symbol">VCFC ▲ 142.22 <span class="up">+1.5%</span></span>
+  </div>
+</body>
+</html>
