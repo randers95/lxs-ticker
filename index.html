@@ -52,7 +52,7 @@ const FEED_URL = "https://script.google.com/macros/s/AKfycbySgsOv083Th7Rg9ECTDEy
 
 let currentData = [];
 
-// Build ticker for the first time
+// Build ticker
 function renderTicker(data) {
   const html = data.map(t => {
     const dir = t.direction === "up" ? "▲" : "▼";
@@ -60,26 +60,24 @@ function renderTicker(data) {
       ${t.symbol} ${dir} <span class="${t.direction} price">${t.price}</span>
       <span class="${t.direction} change">${t.change}</span></span>`;
   }).join('');
-  ticker.innerHTML = html + html; // duplicate for seamless loop
+  ticker.innerHTML = html + html;
   ticker.classList.add('scrolling');
 }
 
-// Update prices while scrolling
+// Update data in place
 async function loadTickers() {
   try {
-    const res = await fetch(FEED_URL);
+    const res = await fetch(FEED_URL, { cache: "no-store" });
     if (!res.ok) throw new Error("Feed not reachable");
     const data = await res.json();
     if (!Array.isArray(data) || data.length === 0) return;
 
-    // First load builds ticker
     if (currentData.length === 0) {
       currentData = data;
       renderTicker(data);
       return;
     }
 
-    // Update existing symbols in place
     data.forEach(t => {
       const el = document.getElementById(t.symbol);
       if (el) {
@@ -87,18 +85,18 @@ async function loadTickers() {
         const changeEl = el.querySelector('.change');
         if (priceEl) priceEl.textContent = t.price;
         if (changeEl) changeEl.textContent = t.change;
-        priceEl.className = `${t.direction} price`;
-        changeEl.className = `${t.direction} change`;
+        if (priceEl) priceEl.className = `${t.direction} price`;
+        if (changeEl) changeEl.className = `${t.direction} change`;
       }
     });
-
     currentData = data;
   } catch (err) {
     console.error(err);
+    ticker.innerHTML = "<span style='color:red;'>Error loading ticker feed.</span>";
   }
 }
 
-// Initial load and timed updates
+// Run and refresh
 loadTickers();
 setInterval(loadTickers, 30000);
 </script>
